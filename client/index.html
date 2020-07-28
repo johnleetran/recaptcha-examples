@@ -1,0 +1,42 @@
+<html>
+
+<head>
+    <script src="https://www.google.com/recaptcha/api.js?render"></script>
+</head>
+
+<body>
+    <script>
+        async function onSubmit(token) {
+            try {
+                let verifyData = await fetch('http://localhost:3000/v2/verify/checkbox', {
+                    method: 'POST', // or 'PUT'
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ "token": token }),
+                })
+                let data = await verifyData.json();
+                data = JSON.parse(data)
+                if(data.success === true){
+                    console.log("add button")
+                    var button = document.createElement("button");
+                    button.innerHTML = "Do Something";
+                    var body = document.getElementsByTagName("body")[0];
+                    body.appendChild(button);
+                }else{
+                    console.log("go away you bot")
+                }
+            } catch (e) {
+                console.log("err", e);
+            }
+        }
+    </script>
+    <span id="captcha" style="margin-left:100px;color:red" />
+    <div class="g-recaptcha" data-callback="onSubmit" data-sitekey="6LdnhrYZAAAAAOI5RT0MAma8rfBEKJy3Zx8zYaCy"></div>
+    <br />
+
+    </script>
+
+</body>
+
+</html>

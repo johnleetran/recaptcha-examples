@@ -1,0 +1,62 @@
+<html>
+
+<head>
+    <script
+        src="https://www.google.com/recaptcha/api.js?render=6LcagrYZAAAAAMLW39tQyc94mvnaG2xErx-jafPR"></script>
+    <script>
+            // // var onSubmit = function (token) {
+            // //     console.log('success!');
+            // // };
+
+            // function validate(event) {
+            //     event.preventDefault();
+            //     if (!document.getElementById('field').value) {
+            //         alert("You must add text to the required field");
+            //     } else {
+            //         grecaptcha.execute();
+            //     }
+            // }
+            // function onload() {
+            //     e.preventDefault();
+            //     var element = document.getElementById('submit');
+            //     element.onclick = validate;
+            // }
+            // var onloadCallback = function () {
+            //     grecaptcha.render('submit', {
+            //         'sitekey': '6LeZeLYZAAAAABVs8vFFs8sP7dbEgcEfqWbji_nH',
+            //         'callback': onSubmit
+            //     });
+            // };
+    </script>
+</head>
+
+<body>
+    <script>
+        async function onSubmit(token) {
+            try {
+                let verifyData = await fetch('http://localhost:3000/v2/verify/invisible', {
+                    method: 'POST', // or 'PUT'
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ "token": token }),
+                })
+                let data = await verifyData.json();
+                console.log(data);
+            } catch (e) {
+                console.log("err", e);
+            }
+        }
+    </script>
+    <span id="captcha" style="margin-left:100px;color:red" />
+    <div class="g-recaptcha" data-sitekey="6LcagrYZAAAAAMLW39tQyc94mvnaG2xErx-jafPR" data-callback="onSubmit"
+        data-size="invisible">
+    </div>
+    <button class="g-recaptcha" data-sitekey="6LcagrYZAAAAAMLW39tQyc94mvnaG2xErx-jafPR" data-callback='onSubmit'
+        data-action='submit'>Submit V2 Invisible</button>
+
+    </script>
+
+</body>
+
+</html>

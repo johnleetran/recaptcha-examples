@@ -1,0 +1,40 @@
+<html>
+    <head>
+        <script src="https://www.google.com/recaptcha/api.js?render=6LeZeLYZAAAAABVs8vFFs8sP7dbEgcEfqWbji_nH&render=explicit"></script>
+    </head>
+    <body>
+        <script>
+            async function onSubmit(e) {
+                console.log("onSubmit")
+                //e.preventDefault();
+                grecaptcha.ready( async () => {
+                    console.log("ready")
+                    let gExecute = await grecaptcha.execute('6LeZeLYZAAAAABVs8vFFs8sP7dbEgcEfqWbji_nH', { action: 'submit' }).then( async (token) => {
+                        console.log("fetch")
+                        // Add your logic to submit to your backend server here.
+                        try{
+                            let verifyData = await fetch('http://localhost:3000/v3/verify', {
+                                method: 'POST', // or 'PUT'
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify({"token": token }),
+                            })     
+                            let data = await verifyData.json();
+                            console.log(data);                       
+                        }catch(e){
+                            console.log("err", e);
+                        }
+
+                    });
+                });
+            }
+        </script>
+        <div class="g-recaptcha" data-sitekey="6LeZeLYZAAAAABVs8vFFs8sP7dbEgcEfqWbji_nH" data-callback="onSubmit" data-size="invisible">
+        </div>
+        <button class="g-recaptcha" data-sitekey="6LeZeLYZAAAAABVs8vFFs8sP7dbEgcEfqWbji_nH" data-callback='onSubmit' data-action='submit'>Submit Custom</button>
+
+</script>
+
+    </body>
+</html>
